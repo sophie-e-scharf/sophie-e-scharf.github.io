@@ -1,8 +1,6 @@
-# Site wide configuration
-
-title: Academic Website of David Izydorczyk
-locale: en_US
-
+title:		           'David Izydorczyk'
+description:	       'David Izydorczyk, PhD Student'
+author:              'David Izydorczyk'
 
 # Enter the following platform usernames if you would like for them to appear on your site.
 owner:
@@ -12,5 +10,10 @@ owner:
   email: izydorczyk@uni-mannheim.de
   twitter: easydoorchick
 
+
 # Build settings
-markdown: kramdown
+markdown:            kramdown
+highlighter:         rouge
+permalink:           none
+plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-tag]
+
