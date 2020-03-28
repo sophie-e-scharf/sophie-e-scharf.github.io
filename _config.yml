@@ -1,3 +1,20 @@
 name: David Izydorczyk
 markdown: kramdown
 
+# Site wide configuration
+
+title: Website of David Izydorczyk
+locale: en_US
+
+
+# Enter the following platform usernames if you would like for them to appear on your site.
+owner:
+  name: David Izydorczyk
+  avatar: profile_pic.jpg
+  bio: "This is a sample Jekyll academic website."
+  email: izydorczyk@uni-mannheim.de
+  # Do not include the @ symbol in your Twitter username
+  twitter: easydoorchick
+  github: dizyd
+  orcid: 0000-0002-8792-0795
+  researchgate: David Izydorczyk
