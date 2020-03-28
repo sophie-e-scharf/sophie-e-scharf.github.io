@@ -1,2 +1,4 @@
 name: David Izydorczyk
 markdown: kramdown
+theme: jekyll-theme-slate
+description: Personal homepage
