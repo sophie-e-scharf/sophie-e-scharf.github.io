@@ -11,3 +11,6 @@ owner:
   bio: "This is a sample Jekyll academic website."
   email: izydorczyk@uni-mannheim.de
   twitter: easydoorchick
+
+# Build settings
+markdown: kramdown
