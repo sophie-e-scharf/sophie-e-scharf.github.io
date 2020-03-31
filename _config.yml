@@ -1,19 +1,60 @@
-title:		           'David Izydorczyk'
-description:	       'David Izydorczyk, PhD Student'
-author:              'David Izydorczyk'
+locale                   : "en-US"
+title                    : "David Izydorczyk / Website"
+title_separator          : "-"
+name                     : &name "David Izydorczyk"
+description              : &description "PhD Student"
 
-# Enter the following platform usernames if you would like for them to appear on your site.
-owner:
-  name: David Izydorczyk
-  avatar: profile_pic.jpg
-  bio: "This is a sample Jekyll academic website."
-  email: izydorczyk@uni-mannheim.de
-  twitter: easydoorchick
-
-
-# Build settings
-markdown:            kramdown
 highlighter:         rouge
-permalink:           none
+markdown:            kramdown
 plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-tag]
 
+
+# Site Author
+author:
+  name             : "David Izydorczyk"
+  avatar           : "profile_pic.png"
+  bio              : "Your biography for the left-hand sidebar"
+  location         : "University of Mannheim"
+  email            : "izydorczyk@uni-mannheim.de"
+  researchgate     : "https://www.researchgate.net/profile/David_Izydorczyk2"
+  github           : "dizyd"
+  orcid            : "http://orcid.org/0000-0002-8792-0795"
+  twitter          : "easydoorchick"
+  xing             : "David Izydorczyk"
+  
+  
+  
+# Reading Files
+include:
+  - .htaccess
+  - _pages
+  - files
+exclude:
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - .asset-cache
+  - .bundle
+  - .jekyll-assets-cache
+  - .sass-cache
+  - CHANGELOG
+  - Capfile
+  - Gemfile
+  - Gruntfile.js
+  - LICENSE
+  - README
+  - Rakefile
+  - assets/js/_main.js
+  - assets/js/plugins
+  - assets/js/vendor
+  - config
+  - gulpfile.js
+  - log
+  - node_modules
+  - package.json
+  - tmp
+  - vendor
+keep_files:
+  - .git
+  - .svn
+encoding: "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
