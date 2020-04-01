@@ -1,11 +1,8 @@
 ---
-permalink: /
 title: "Shiny"
+permalink: /shiny/
 excerpt: "Shiny"
 author_profile: true
-redirect_from: 
-  - /shiny/
-  - /shiny.html
 ---
 
 
