@@ -1,4 +1,5 @@
 ---
+layout: archive
 title: "Shiny"
 permalink: /shiny/
 excerpt: "Shiny"
