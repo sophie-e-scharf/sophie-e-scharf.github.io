@@ -108,14 +108,6 @@ defaults:
       author_profile: true
       share: true
       comment: true
-  # _shiny
-  - scope:
-      path: ""
-      type: shiny
-    values:
-      layout: shiny
-      author_profile: true
-      share: true
 
 # Sass/SCSS
 sass:
