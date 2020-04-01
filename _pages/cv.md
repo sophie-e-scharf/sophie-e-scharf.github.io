@@ -62,7 +62,39 @@ Topal, A. B., Karakasheva, R., Mascarenhas, M. F., Dbbers, F., Hoszowska, M., Ks
 ## Workshops and Summerschools
 ***
 
-**Model-based Neuroscience**, Summer School, 2019, University of Amsterdam, Netherlands
+### 2019 
+
+**Introduction to Stan: A Probabilistic Programming Language for Bayesian Inference**, Workshop by Paul Bürkner, 2019, at University of Mannheim, Germany 
+
+**An Introduction to Machine Learning**, Workshop by Andreas Brandmeaier, 2019, at University of Mannheim, Germany 
+
+**NHST reloaded: Recent developments**, Workshop by Rolf Ulrich and Jeff Miller, 2019, at University of Tübingen, Germany 
+
+**Model-based Neuroscience**, Summer School, 2019, at University of Amsterdam, Netherlands
+
+**A Modern Axiomatic Perspective: Theory, Statistical Methodology, and Experimental Design**, Workshop by Clintin Davis-Stober, 2019, at University of Mannheim, Germany
+
+**Python basics**, Workshop by Stefan Radev, 2019, at University of Heidelberg, Germany
+
+**Hypothesis Evaluation Using the Bayes Factor**, Workshop by Herbert Hoijtink, 2019, at University of Mannheim, Germany
+
+**Introduction to Bayesian Inference: Core Principles and Application in Stan**,  Workshop by Daniel Heck, 2019, at University of Mannheim, Germany
+
+**Numerical Methods for Quantitative Psychologists**, Workshop by Francis Tuerlinckx, 2019, at University of Tübingen, Germany
+
+**Academic Writing and Publishing**, Workshop by Benjamin Hilbig, 2019, at University of Koblenz-Landau, Germany
+
+### 2018
+
+**An Introduction to modern R, Statistical Modeling, and Mixed Models**, Workshopy by Henrik Singmann, 2018, at University of Freiburg, Germany
+
+**Advanced Topics in R**, Workshopy by Daniel Heck, 2018, at University of Mannheim, Germany
+
+**Analysis of Response Time**, Workshopy by Trisha van Zandt, at University of Mannheim, Germany
+
+**Rules of Good Scientific Practice**, Workshop by Arndt Bröder, 2018, at University of Mannheim, Germany
+
+### 2014
 
 **Structural equation modelling in R with lavaan**, Workshop by Dorota Reis & Tanja Lischetzke, 2014, University of Koblenz-Landau, Germany
 
