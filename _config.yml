@@ -13,7 +13,7 @@ plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-t
 author:
   name             : "David Izydorczyk"
   avatar           : "profile.jpg"
-  bio              : "Your biography for the left-hand sidebar"
+  bio              : "Ph.D. Student in the Research Training Group Statistical Modeling Psychology (SMiP). Interested in Cognitive Modeling, Bayesian Statistics, and R."
   location         : "University of Mannheim"
   email            : "izydorczyk@uni-mannheim.de"
   researchgate     : "https://www.researchgate.net/profile/David_Izydorczyk2"
