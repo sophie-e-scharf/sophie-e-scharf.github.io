@@ -49,7 +49,7 @@ Thesis: _Structuring the uncanny valley: Investigating the effect of the persona
 
 **Izydorzcyk,  D.** & Unkelbach,  C. (2019). *Simulating the ecology:  Using the BIASmodel  to  simulate  and  explain  contradicting  evidence  of  the  out-group  homogeneityeffect, the intergroup bias, and the density hypothesis.*  Poster presented at the 17th Conference of the Social Psychology Section, September 16-17, Cologne, Germany.
 
-**Izydorzcyk,  D. **(2019). *Measuring  rule-  and  exemplar-based  processes  in  numeri-cal judgments.*  Poster presented at the 34th IOPS Summer Conference, June 14-16, Utrecht, Netherlands.
+**Izydorzcyk,  D.** (2019). *Measuring  rule-  and  exemplar-based  processes  in  numeri-cal judgments.*  Poster presented at the 34th IOPS Summer Conference, June 14-16, Utrecht, Netherlands.
 
 
 #### 2018
