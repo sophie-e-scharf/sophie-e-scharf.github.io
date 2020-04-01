@@ -108,12 +108,12 @@ defaults:
       author_profile: true
       share: true
       comment: true
-  # _talks
+  # _shiny
   - scope:
       path: ""
-      type: talks
+      type: shiny
     values:
-      layout: talk
+      layout: shiny
       author_profile: true
       share: true
 

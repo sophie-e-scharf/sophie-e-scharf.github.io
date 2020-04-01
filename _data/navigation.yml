@@ -5,3 +5,6 @@ main:
 
   - title: "CV"
     url: /cv/
+
+  - title: "Shiny"
+    url: /shiny/
