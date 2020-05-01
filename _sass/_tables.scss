@@ -4,12 +4,13 @@
 
 table {
   margin-bottom: 1em;
-  width: 100%;
+  width: 70%;
+  margin-left:15%; 
+  margin-right:15%;
   font-family: $global-font-family;
-  font-size: $type-size-6;
+  font-size: $type-size-7;
   border-collapse: collapse;
   border: 1px solid $light-gray;
-
   & + table {
     margin-top: 1em;
   }
@@ -23,7 +24,6 @@ thead {
 th {
   padding: 0.5em;
   font-weight: bold;
-  text-align: left;
   border-right: 1px solid $light-gray;
 }
 

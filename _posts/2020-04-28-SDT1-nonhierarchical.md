@@ -1,36 +1,31 @@
 ---
+layout: single
 title: "Signal Detection Model with STAN - Part 1"
-author: "David Izydorczyk"
 date: 2020-04-28
-output: 
-  html_document:
-    keep_md: true
-    toc: true
-    df_print: paged
-    number_sections: true
-    theme: paper
-    highlight: tango
-bibliography: "../Literatur/my_bib.bib"
-csl: "../apa6.csl"
-layout: post
-categories: R
+tags:
+  - cognitive modeling
+  - STAN
+  - R
+  
 # status: process
 # published: true
 status: publish
 published: true
+permalink: /posts/2020/04/SDT-1/
 ---
  
+
  
-- Describe Model + Parameters more
-- Describe results more
  
-# About this blog post
+ 
+## About this blog post
  
 This blog post is supposed to be the first blog post in a series of blog posts comparing the SDT model with a 2THM model. I wrote this blog post for three reasons. First, I wanted to learn more about the modeling of memory data. Second, I wanted to learn more about STAN, since I mostly use JAGS in my own research. Finally, I also wanted to get more practice in writing, since I take forever when writing my own articles (which I am supposed to do right now, when writing this blogpost). So the reasons for this (and following blog posts) are rather selfish. However, if anyone ever finds this blog post and finds it helpful, that would be even better !
  
 This blog post is about modeling data from a memory recogntion task with a non-hierarchical SDT model. In following blog posts, I will extend this model to account for differences between individuals as well as differences between stimulus sets. Then I will model the same data with a 2HTM and finally compare both models with each other. 
  
-# Setup 
+## Setup 
+ 
  
 At the beginning I the load packages I need for this analysis and set the general settings for the code chunks of the markdown document.
  
@@ -46,23 +41,23 @@ library(kableExtra)
 library(knitr)
 {% endhighlight %}
  
-
-{% highlight r %}
-knitr::opts_chunk$set(echo  = TRUE,cache = TRUE)
-bayesplot_theme_set(theme_bw())
-{% endhighlight %}
  
-# Signal detection model
  
-In this part, I want to model the data with a signal detection model (SDT) as described in Chapter 11 of the fantastic book from @lee2014. Signal detection theory (SDT) may be applied to any area of psychology in which two different types
+ 
+## Signal detection model
+ 
+In this part, I want to model the data with a signal detection model (SDT) as described in Chapter 11 of the fantastic book from Lee and Wagenmakers (2014). Signal detection theory (SDT) may be applied to any area of psychology in which two different types
 of stimuli must be discriminated. It was first applied in studies of perception, where subjects had to discriminated between signals (stimuli) and noise (no stimuli). However, SDT is also often used to decribe  recognition memory, where subjects have to discriminate between old (signal) and new items (noise). 
  
 The idea behind SDT is that signal and noise trials can be represented as values along a uni-dimensional "strength" dimension, where signal trials are assumed to have a greater strength than noise trials. According to SDT, people produce "old" or "new" decisions by comparing the strength of the current trial to a fixed threshold. If the strength exceeds this threshold, the response is "old", otherwise the response is "new". The distributions of strength of signal and noise trials are assumed to be Normal distributions with different means (the mean of the noise distributions is equal to 0), but the same variance (which is fixed to 1), which can be expressed as:
  
 $$
-noise \sim N(0,1) \\
-signal \sim N(d,1)
+\begin{aligned}
+noise &\sim N(0,1)  \\[.5em]
+signal &\sim N(d,1)
+\end{aligned}
 $$
+ 
 where *d* is the *discriminability* or *sensitivity* parameter, which goes from $-\infty$ to $+ \infty $. This parameter *d* corresponds to the distance between means of the noise and the signal distribution in standard deviation units. A value of 0 indicates an inability to distinguish signals from noise, whereas larger values indicate a correspondingly greater ability to distinguish signals from noise. Negative values are also possible, but are harder to interpret. They are most often thought of as a sampling error or response confusion (i.e., responding "old" when intending to respond "new", and vice vers, for instance by confusing the corresponding buttons). 
  
 Another parameter is the *c*, the *bias* parameter. Positive values of *c* correspond to a bias towards saying *new* and negative values correspond to a bias towards saying *old*. 
@@ -70,8 +65,10 @@ Another parameter is the *c*, the *bias* parameter. Positive values of *c* corre
 These two parameters can then be directly translated into hit (HR) and false-alarm rate (FR) via:
  
 $$
-HR = \phi(0.5 \times d - c) \\
-FR = \phi(- 0.5 \times d - c) 
+\begin{aligned}
+HR &= \phi(0.5 \times d - c) \\[.5em]
+FR &= \phi(- 0.5 \times d - c) 
+\end{aligned}
 $$
  
 where, $\phi$ is the cumulative density function of the standard normal distribution. HR and FR  map naturally to the data pattern we observe in a recognition memory experiment: 
@@ -94,11 +91,11 @@ which corresponds to:
  
 This allows us to take the observed number of hits and false alarms in our experiment, and translate them into psychological meaningfull parameters *d* and *c*
  
-# The Experiment 
+## The Experiment 
  
 The experiment was conducted as part of a pre-test to select stimuli for a subsequent multiple-cue judgment experiment. The experiment consisted of five blocks, with two phases each. In the learning phase, participants saw 12 different pictures of either plants, houses, aliens, bugs, or plates, (a different stimulus set in each block) with features differing on five cues. The same 12 pictures were presented 4 times for 5 seconds to each participant. After the learning phase, participants were presented again with all 12 old pictures as well as 20 new pictures. They were asked to indicate if the picture was an old picture or a new one.  These two phases were repeated for each of the five stimulus sets. 
  
-# The Data set 
+## The Data set 
  
 The data I will use contains the following seven variables:
  
@@ -112,40 +109,28 @@ The data I will use contains the following seven variables:
  
 
 {% highlight r %}
-data <- read.csv2("../Data/Stimulus_Test_tidy.csv") %>% 
+dataSDT <- read.csv2("assets/data/Stimulus_Test_tidy.csv") %>% 
             select(ID,block,trial,stimulus,response,correctResponse,correct)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Warning in file(file, "rt"): cannot open file '../Data/
-## Stimulus_Test_tidy.csv': No such file or directory
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in file(file, "rt"): cannot open the connection
-{% endhighlight %}
-
-
-
-{% highlight r %}
-data[1:6,]
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in data[1:6, ]: object of type 'closure' is not subsettable
-{% endhighlight %}
  
-Based on these variables, I calculated the number of hits, false alarms, false negatives, and misses, as well as their corresponding rates for each person, in each block. In addition, I calculated $d'$  as $d' = z(h) - z(fa)$ [@snodgrass1988; @stanislaw1999], where $h$ is the hit rate and $fa$ is the false-alarm rate.
+dataSDT[1:6,] %>%  kable(.,format  = "markdown")
+{% endhighlight %}
+
+
+
+|ID               | block| trial|stimulus |response |correctResponse |correct |
+|:----------------|-----:|-----:|:--------|:--------|:---------------|:-------|
+|hcpibo8hk7bz2itt |     1|     1|houses   |old      |new             |false   |
+|hcpibo8hk7bz2itt |     1|     2|houses   |new      |new             |true    |
+|hcpibo8hk7bz2itt |     1|     3|houses   |old      |new             |false   |
+|hcpibo8hk7bz2itt |     1|     4|houses   |old      |old             |true    |
+|hcpibo8hk7bz2itt |     1|     5|houses   |old      |new             |false   |
+|hcpibo8hk7bz2itt |     1|     6|houses   |old      |new             |false   |
+ 
+Based on these variables, I calculated the number of hits, false alarms, false negatives, and misses, as well as their corresponding rates for each person, in each block. In addition, I calculated $d'$  as $d' = z(h) - z(fa)$ (Snodgrass &  Corwin, 1988; Stanislaw & Todorov,1999), where $h$ is the hit rate and $fa$ is the false-alarm rate.
  
 
 {% highlight r %}
-hits <- data %>%  
+hits <- dataSDT %>%  
           mutate(IDn            = as.numeric(ID), 
                  hit            = ifelse(response == "old" & correctResponse == "old",1,0),
                  false_positive = ifelse(response == "old" & correctResponse == "new",1,0)) %>% 
@@ -170,30 +155,28 @@ hits <- data %>%
                  z_fa_rate = qnorm(fa_rate),
                  dprime    = z_h_rate-z_fa_rate)  
 {% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in UseMethod("mutate_"): no applicable method for 'mutate_' applied to an object of class "function"
-{% endhighlight %}
  
 Which then gives us the following data structure:
  
 
 {% highlight r %}
-hits[1:5,]
+hits[1:5,-1] %>% kable(.,format  = "markdown")
 {% endhighlight %}
 
 
 
-{% highlight text %}
-## Error in eval(expr, envir, enclos): object 'hits' not found
-{% endhighlight %}
+| IDn|stimulus | block| n_old| n_new|  h| fa|  hit_rate| fa_rate|  z_h_rate| z_fa_rate|     dprime|
+|---:|:--------|-----:|-----:|-----:|--:|--:|---------:|-------:|---------:|---------:|----------:|
+|   1|aliens   |     5|    12|    20|  7| 11| 0.5833333|    0.55| 0.2104284| 0.1256613|  0.0847670|
+|   1|bugs     |     2|    12|    20|  7| 13| 0.5833333|    0.65| 0.2104284| 0.3853205| -0.1748921|
+|   1|houses   |     4|    12|    20|  7| 14| 0.5833333|    0.70| 0.2104284| 0.5244005| -0.3139721|
+|   1|plants   |     3|    12|    20|  7| 12| 0.5833333|    0.60| 0.2104284| 0.2533471| -0.0429187|
+|   1|plates   |     1|    12|    20| 11| 11| 0.9166667|    0.55| 1.3829941| 0.1256613|  1.2573328|
  
  
-I will first build the non-hierarchical version of the SDT ^[Described on pages 158-159 in @lee2014] analyzing the data from only one stimulus set. 
+I will first build the non-hierarchical version of the SDT[^1] analyzing the data from only one stimulus set. 
  
-## SDT - Non Hierarchical - One Stimulus Set 
+### SDT - Non Hierarchical - One Stimulus Set 
  
 As a beginning, I will select the data from only specific stimulus set. 
  
@@ -201,19 +184,13 @@ As a beginning, I will select the data from only specific stimulus set.
 {% highlight r %}
 temp <- hits %>% filter(stimulus == "plants")
 {% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'hits' not found
-{% endhighlight %}
  
  
-### The Model 
+#### The Model 
  
 Next, I will define the SDT model in STAN.  
  
-#### The Data 
+##### The Data 
  
 In the `data` block, I define the data we are using in the model, which are:
  
@@ -233,38 +210,45 @@ stan_data <- list(
   fa = temp$fa,
   p  = length(unique(temp$ID))
 )
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): object 'temp' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 stan_data
 {% endhighlight %}
 
 
 
 {% highlight text %}
-## Error in eval(expr, envir, enclos): object 'stan_data' not found
+## $s
+##  [1] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
+## [30] 12 12 12 12 12 12 12 12 12 12 12
+## 
+## $n
+##  [1] 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+## [30] 20 20 20 20 20 20 20 20 20 20 20
+## 
+## $h
+##  [1]  7  9  7 10 11 12 10  7  6  7  7  8  8  7  6 12  6 11  9 12  7  6 10  8  8  6 11  5  7
+## [30]  8  9 10  6  9  6  6  7  5  6  9
+## 
+## $fa
+##  [1] 12 10 16 10 11 20 12 10 13  7 11 12 11 10  6 20 11 11 14 11 10 14 14 17 10 15  9 11 11
+## [30] 13 16 10 12 13 16 11  8 11 11 13
+## 
+## $p
+## [1] 40
 {% endhighlight %}
  
-#### The Parameters 
+##### The Parameters 
  
 In the `parameters` block, I define the two main parameters we have in our model and which we are interested in, *d* and *c*. These two parameters are then transformed in to the *hit rate* and the *false alarm rate* in the `transformed parameters` block. In the `model` block I then define the binomial likelihood function connecting our parameters and our data. In the `generated quantities` block I also include variables for later posterior predictive analysis, capturing the predictinos of `h` and `fa` based on the current parameter values of each step of the MCMC-chains.
  
-#### The Priors 
+##### The Priors 
  
 The priors for both *d* and *c* are normal distributions with $\mu = 0$ and $\sigma = 1$, which corresponds to a uniform distribution after transforming into hit and false-alarm rates.
  
  
-![plot of chunk unnamed-chunk-4](/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-4-1.png)
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" style="display: block; margin: auto;" />
  
-#### The STAN-Model 
+##### The STAN-Model 
  
 The model code then looks like this:
  
@@ -310,7 +294,7 @@ model {
 }
 {% endhighlight %}
  
-### Run the Model 
+#### Run the Model 
  
 Next, we sample from the model using 10.000 iterations, with  a rather small warm-up of 2000 iterations and a thin = 4. 
  
@@ -329,40 +313,13 @@ fit1 <-sampling(
         refresh    = 0,         # no progress shown
         thin       = 4
       )
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in .local(object, ...): object 'stan_data' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 # save results 
 posterior_SDT_oS_nH <- rstan::extract(fit1, permuted = FALSE)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in rstan::extract(fit1, permuted = FALSE): object 'fit1' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 summary_oS_nH       <- summary(fit1) %>% as.data.frame()
 {% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in summary(fit1): object 'fit1' not found
-{% endhighlight %}
  
-### Inspect MCMC, Rhat, ESS
+#### Inspect MCMC, Rhat, ESS
  
 First, we can look at some MCMC-Traces for some of the parameters and persons.
  
@@ -376,11 +333,7 @@ First, we can look at some MCMC-Traces for some of the parameters and persons.
             facet_args = list(nrow = 4, labeller = label_parsed))
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in is.data.frame(x): object 'posterior_SDT_oS_nH' not found
-{% endhighlight %}
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
  
 So far so good, this looks exactly as you would like it, some nice hairy caterpillars.
  
@@ -394,41 +347,21 @@ p1 <- ggplot(summary_oS_nH,aes(x =summary.n_eff))+
         theme_bw() +
         labs(x = "Effective Sample Size",
              y = "Count")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in ggplot(summary_oS_nH, aes(x = summary.n_eff)): object 'summary_oS_nH' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 p2 <- ggplot(summary_oS_nH,aes(x =summary.Rhat))+
         geom_histogram(bins = 40, color = "black", fill = "tomato2")+
         theme_bw() +
         labs(x = "Rhat",
              y = "Count")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in ggplot(summary_oS_nH, aes(x = summary.Rhat)): object 'summary_oS_nH' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 p1+p2
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-8](/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-8-1.png)
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
  
 This looks also good. The effective sample sizes are always > 400, which is often recommended (citation), and are near the total sample size of  4000.
  
-### Posterior Summaries & Densities
+#### Posterior Summaries & Densities
  
 Next, we can look at the summary statistics and plots of the posterior densitie distributions. So lets make a convient tidy data.frame for plotting and for the posterior summary statistics. 
  
@@ -444,17 +377,7 @@ desc_oS_nH_tidy <- summary_oS_nH %>%
                              HDI025  = summary.2.5.,
                              median  = summary.50.,
                              HDI975  = summary.97.5.) 
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'summary_oS_nH' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 mcmc_SDT_oS_nH <-  rstan::extract(fit1,pars="lp__",include=FALSE) %>%
                       bind_rows() %>% 
                       mutate(ID     = rep(1:40,each = 4000),
@@ -463,28 +386,13 @@ mcmc_SDT_oS_nH <-  rstan::extract(fit1,pars="lp__",include=FALSE) %>%
                       mutate(mPP_d  = median(d),
                              mPP_c  = median(c))
 {% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in rstan::extract(fit1, pars = "lp__", include = FALSE): object 'fit1' not found
-{% endhighlight %}
  
  
-#### d 
+##### d 
  
 Since *d* is the parameter we are most interested in, lets start with this one. Below are the descriptive statistics, a forest plot showing the median, 50 \%, and 96 \% credible intervals of the posterior distributions, as well as univariate marginal posterior distributions for some participants, showing the median posterior estimate (red dashed line) as well as the analyticaly calculated *d'* (black dashed line).
  
-
-{% highlight r %}
-desc_oS_nH_tidy %>% filter(param %in% c("d"))
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'desc_oS_nH_tidy' not found
-{% endhighlight %}
+ 
  
  
 
@@ -496,50 +404,31 @@ mcmc_intervals(posterior_SDT_oS_nH,
                prob_outer = 0.96)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in is.data.frame(x): object 'posterior_SDT_oS_nH' not found
-{% endhighlight %}
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
  
  
 
 {% highlight r %}
 mcmc_SDT_oS_nH %>%
-  filter(ID %in% sample(1:40,size=4)) %>% 
+  filter(ID %in% 1:6) %>% 
   ggplot(., aes(x = d))+
     geom_density(color = "black",fill = "skyblue2",alpha=0.5) +
     geom_vline(aes(xintercept = mPP_d), color = "red", lty = "dashed",lwd = 1) +
     geom_vline(aes(xintercept = dprime), color = "black", lty = "dashed") +
-    facet_grid(.~ID,scales="free") + 
+    facet_wrap(.~ID,scales="free") + 
     theme_bw()
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'mcmc_SDT_oS_nH' not found
-{% endhighlight %}
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
  
 We can see that the *d'* values are rather small and very close to 0 for most people. This indicates that participants had a hard time differentiating old from new stimuli. I had hoped for larger values, as it is necessary that people are able to discriminate between stimuli and their feature rather well for the multiple-cue judgment experiment I want to conduct with these stimuli.
  
 Also, from the plots it is also evident that the median of the posterior distribution is very close to the analytically calculated *d'* value.  
  
  
-#### c
+##### c
  
 We can also look at the *c* values. Since we have more noise trials (new stimuli) than signal trials (old stimuli) in our testing phase (20 vs. 12), and participant were told this information, I expected to find slightly positive values of *c*. However, as apparent from the summary statistics and the plots, participants had more negative values of *c*, indicating a bias for the "old"-response.
- 
-
-{% highlight r %}
-desc_oS_nH_tidy %>% filter(param %in% c("c"))
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'desc_oS_nH_tidy' not found
-{% endhighlight %}
  
 
 {% highlight r %}
@@ -550,16 +439,12 @@ mcmc_intervals(posterior_SDT_oS_nH,
                prob_outer = 0.96)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in is.data.frame(x): object 'posterior_SDT_oS_nH' not found
-{% endhighlight %}
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
  
 
 {% highlight r %}
 mcmc_SDT_oS_nH %>%
-  filter(ID %in% sample(1:40,size=4)) %>% 
+  filter(ID %in% 1:6) %>% 
   ggplot(., aes(x = c))+
     geom_density(color = "black",fill = "skyblue2",alpha=0.5) +
     geom_vline(aes(xintercept = mPP_c), color = "red", lty = "dashed",lwd = 1) +
@@ -567,11 +452,7 @@ mcmc_SDT_oS_nH %>%
     theme_bw()
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'mcmc_SDT_oS_nH' not found
-{% endhighlight %}
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
  
 ### The posterior predictive values
  
@@ -580,38 +461,26 @@ We can also look at the posterior predictive values of `h` and `fa`.
 
 {% highlight r %}
 temp     <- hits  %>%  filter(stimulus == "plants") %>% ungroup() %>% select(.,IDn,h,fa)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'hits' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 postpred <- mcmc_SDT_oS_nH %>% 
               select(., ID, h_pred, fa_pred) %>% 
               left_join(.,temp,by = c("ID" = "IDn")) 
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'mcmc_SDT_oS_nH' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 head(postpred)
 {% endhighlight %}
 
 
 
 {% highlight text %}
-## Error in head(postpred): object 'postpred' not found
+## # A tibble: 6 x 5
+## # Groups:   ID [1]
+##      ID h_pred fa_pred     h    fa
+##   <dbl>  <dbl>   <dbl> <dbl> <dbl>
+## 1     1      8      11     7    12
+## 2     1      7      13     7    12
+## 3     1      9      14     7    12
+## 4     1      4      14     7    12
+## 5     1      9      11     7    12
+## 6     1      6      12     7    12
 {% endhighlight %}
  
  
@@ -622,75 +491,31 @@ pp1 <- ggplot(filter(postpred,ID %in% 1:4),aes(x = h_pred)) +
         geom_vline(aes(xintercept =  h),color = "black",lwd = 1.5, lty = "dashed")+
         facet_wrap(.~ID,scales="free") + 
         theme_bw() 
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in filter(postpred, ID %in% 1:4): object 'postpred' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 pp2 <- ggplot(filter(postpred,ID %in% 1:4),aes(x = fa_pred)) +
         geom_histogram(bins=10,color = "black",fill = "tomato2",alpha=0.5) +
         geom_vline(aes(xintercept =  fa),color = "black",lwd = 1.5, lty = "dashed")+
         facet_wrap(.~ID,scales="free") + 
         theme_bw() 
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in filter(postpred, ID %in% 1:4): object 'postpred' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 pp1 + pp2
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): object 'pp1' not found
-{% endhighlight %}
+<img src="/assets/img/2020-04-28-SDT1-nonhierarchical.Rmd/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
  
 And we can also calculate how often the 95% credible interval of the predicted values contains the true values:
  
 
 {% highlight r %}
 temp1 <- hits  %>%  filter(stimulus == "plants") %>% ungroup() %>% select(.,ID=IDn,h,fa)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'hits' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 temp2 <- desc_oS_nH_tidy %>% 
           select(param,ID,HDI025,HDI975)  %>% 
           filter(param == "h_pred" | param == "fa_pred") %>% 
           pivot_wider(.,id_cols    = ID,
                         names_from = param,
                                           values_from = c(HDI025,HDI975))
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'desc_oS_nH_tidy' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
+ 
 left_join(temp1,temp2,by = "ID")  %>% 
   summarize(pp_h  = mean(h > HDI025_h_pred & h < HDI975_h_pred),
             pp_fa = mean(fa > HDI025_fa_pred & fa < HDI975_fa_pred))
@@ -699,8 +524,26 @@ left_join(temp1,temp2,by = "ID")  %>%
 
 
 {% highlight text %}
-## Error in left_join(temp1, temp2, by = "ID"): object 'temp1' not found
+## # A tibble: 1 x 2
+##    pp_h pp_fa
+##   <dbl> <dbl>
+## 1 0.925  0.95
 {% endhighlight %}
  
 As evident from the plots and the 95% credible interval checks of the posterior predictives, our model is able to recover our data well.
  
+---
+ 
+### References 
+ 
+- Lee, M. D., & Wagenmakers, E. J. (2014). *Bayesian cognitive modeling: A practical course.* Cambridge university press.
+ 
+- Snodgrass, J. G., & Corwin, J. (1988). Perceptual Identification Thresholds for 150 Fragmented Pictures from the Snodgrass and Vanderwart Picture Set. *Perceptual and Motor Skills*, 67(1), 3â€“36. https://doi.org/10.2466/pms.1988.67.1.3
+ 
+- Stanislaw, H., & Todorov, N. (1999). Calculation of signal detection theory measures. *Behavior Research Methods, Instruments, & Computers*, 31(1), 137â€“149. https://doi.org/10.3758/BF03207704
+ 
+--- 
+ 
+### Footnotes
+ 
+[^1]: Described on pages 158-159 in Lee and Wagenmakers (2014)]
