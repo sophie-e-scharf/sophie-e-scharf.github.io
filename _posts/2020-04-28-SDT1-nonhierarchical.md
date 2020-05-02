@@ -240,9 +240,9 @@ In the `generated quantities` block I also include variables for later posterior
 The priors for both *d* and *c* are normal distributions with $\mu = 0$ and $\sigma = 1$
  
 $$
-\begin{aligned}\small{
+\begin{aligned}
 d &\sim Normal(0,1)\\[.5em]
-c &\sim Normal(0,1)}
+c &\sim Normal(0,1)
 \end{aligned}
 $$
  
