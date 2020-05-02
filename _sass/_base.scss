@@ -15,6 +15,11 @@ body {
   font-family: $global-font-family;
   line-height: 1.5;
 
+.mjx-chtml{ 
+  font-size: 100% !important;;
+}
+
+
   &.overflow--hidden {
     /* when primary navigation is visible, the content in the background won't scroll */
     overflow: hidden;
