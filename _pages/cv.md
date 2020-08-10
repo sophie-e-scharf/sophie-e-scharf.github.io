@@ -18,15 +18,15 @@ Doctoral program at the DFG Research Training Group “Statistical Modeling in P
 **B.Sc. Psychology**, University of Koblenz-Landau, 10/2012-09/2016.
 Thesis: _Structuring the uncanny valley: Investigating the effect of the personal need for structure on the uncanny valley phenomenon by using mixed-effects modelling with partially  crossed random effects_  (advisors: Markus Appel, Tanja Lischetzke)
  
-## Research Experience
-***
-
-## Professional Experience
-***
 
 ## Teaching Experience
 ***
 
+**Workshop Advanced R**, University of Mannheim , RTG Statistical Modeling in Psychology (level: P.hD.; language: English)
+
+**Workshop Modern R**, University of Mannheim , RTG Statistical Modeling in Psychology (level: P.hD.; language: English)
+
+**Tutorial Multivariate Statistics**, University of Cologne , Department for Research Methods and Experimental Psychology (level: M.Sc.; language: German)
 
 **Tutorial Multivariate Statistics**, University of Cologne , Department for Research Methods and Experimental Psychology (level: M.Sc.; language: German)
  
@@ -49,7 +49,7 @@ Thesis: _Structuring the uncanny valley: Investigating the effect of the persona
 
 **Izydorzcyk,  D.** & Unkelbach,  C. (2019). *Simulating the ecology:  Using the BIASmodel  to  simulate  and  explain  contradicting  evidence  of  the  out-group  homogeneityeffect, the intergroup bias, and the density hypothesis.*  Poster presented at the 17th Conference of the Social Psychology Section, September 16-17, Cologne, Germany.
 
-**Izydorzcyk,  D.** (2019). *Measuring  rule-  and  exemplar-based  processes  in  numeri-cal judgments.*  Poster presented at the 34th IOPS Summer Conference, June 14-16, Utrecht, Netherlands.
+**Izydorzcyk,  D.** (2019). *Measuring  rule-  and  exemplar-based  processes  in  numerical judgments.*  Poster presented at the 34th IOPS Summer Conference, June 14-16, Utrecht, Netherlands.
 
 
 #### 2018
