@@ -8,9 +8,9 @@ tags:
   - R
   
 # status: process
-# published: true
+published: true
 status: process
-published: false
+# published: false
 permalink: /posts/2020/04/SDT-1/
 ---
 
